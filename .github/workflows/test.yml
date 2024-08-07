@@ -1,13 +1,12 @@
 name: 'Laravel Test'
 on:
-  push:
+  pull_request:
     branches:
-      - main
-
+      - master
+      - dev
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Setup Composer
         uses: shivammathur/setup-php@v2
@@ -15,8 +14,24 @@ jobs:
           php-version: '8.2'
           tools: composer
 
+      - name: Laravel Install
+      - run: composer global require laravel/installer
+          
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            vendor
+            ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
@@ -27,5 +42,5 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate
 
-      - name: Start Test
-        run: php artisan test
+      - name: Run Test
+      - run: php artisan test
