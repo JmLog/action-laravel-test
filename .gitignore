@@ -1,0 +1,25 @@
+## git ignore
+## 프로젝트 기본 설정
+.env
+.env.testing
+vendor
+node_modules
+public
+storage
+
+## 에디터
+.vscode
+.idea
+.project
+
+## Mac OS
+.DS_Store
+
+## Windos
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+## Test Code
+coverage
+.tests-before-240123
