@@ -13,7 +13,7 @@ jobs:
         with:
           php-version: '8.2'
           tools: composer
-        
+
       - name: Check out repository code
         uses: actions/checkout@v2
 
@@ -23,16 +23,22 @@ jobs:
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_ENV
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             vendor
-            ${{ steps.composer-cache.outputs.dir }}
+            ${{ env.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          restore-keys: |
+            ${{ runner.os }}-composer-
+            ${{ runner.os }}-
+
+      - name: Check cache contents
+        run: ls -la vendor || echo "Vendor directory is empty, will run composer install"
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
+        if: steps.cache-composer.outputs.cache-hit != 'true'
 
       - name: Copy .env.example to .env
         run: cp .env.example .env
