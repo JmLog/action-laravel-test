@@ -9,7 +9,7 @@ class UserTest extends TestCase
     /**
      * A basic unit test example.
      */
-    public function user_test(): void
+    public function test_example(): void
     {
         $this->assertTrue(true);
     }
