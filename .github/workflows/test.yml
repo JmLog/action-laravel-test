@@ -23,6 +23,7 @@ jobs:
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_ENV
 
       - name: Cache Composer dependencies
+        id: cache-composer
         uses: actions/cache@v3
         with:
           path: |
@@ -37,8 +38,8 @@ jobs:
         run: ls -la vendor || echo "Vendor directory is empty, will run composer install"
 
       - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
         if: steps.cache-composer.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Copy .env.example to .env
         run: cp .env.example .env
