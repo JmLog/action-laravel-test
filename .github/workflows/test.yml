@@ -3,21 +3,17 @@ on:
   push:
     branches:
       - main
-
+      
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Setup Composer
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           tools: composer
-
-      - name: Laravel Install
-        run: composer global require laravel/installer
-          
+        
       - name: Check out repository code
         uses: actions/checkout@v2
 
@@ -43,10 +39,5 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate
 
-      - name: Create SQLite database
-        run: |
-          touch database/database.sqlite
-          php artisan migrate --env=testing --force
-
-      - name: Run Test
+      - name: Start Test
         run: php artisan test
