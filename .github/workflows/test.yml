@@ -14,3 +14,19 @@ jobs:
         with:
           php-version: '8.2'
           tools: composer
+
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - run: ls -al
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Run Test
+      - run: php artisan test
