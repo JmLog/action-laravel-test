@@ -17,11 +17,6 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_ENV
-
       - name: Cache Composer dependencies
         id: cache-composer
         uses: actions/cache@v3
@@ -35,7 +30,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Check cache contents
-        run: ls -la vendor || echo "Vendor directory is empty, will run composer install"
+        run: ls -la vendor && ls -la ${{ env.dir }}
 
       - name: Install Composer dependencies
         if: steps.cache-composer.outputs.cache-hit != 'true'
