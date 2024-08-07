@@ -1,12 +1,13 @@
 name: 'Laravel Test'
 on:
-  pull_request:
+  push:
     branches:
-      - master
-      - dev
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Setup Composer
         uses: shivammathur/setup-php@v2
@@ -15,10 +16,10 @@ jobs:
           tools: composer
 
       - name: Laravel Install
-      - run: composer global require laravel/installer
+        run: composer global require laravel/installer
           
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Get Composer Cache Directory
         id: composer-cache
@@ -42,5 +43,10 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate
 
+      - name: Create SQLite database
+        run: |
+          touch database/database.sqlite
+          php artisan migrate --env=testing --force
+
       - name: Run Test
-      - run: php artisan test
+        run: php artisan test
