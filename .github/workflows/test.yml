@@ -59,7 +59,7 @@ jobs:
       - name: Check Zip
         run: ls -al
 
-      - uses: shallwefootball/s3-upload-action@main
+      - uses: shallwefootball/s3-upload-action@master
         name: Upload S3
         id: S3
         with:
