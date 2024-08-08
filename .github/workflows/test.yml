@@ -49,3 +49,21 @@ jobs:
 
       - name: Start Test
         run: php artisan test
+
+      - name: Install zip
+        run: sudo apt-get install -y zip
+  
+      - name: Zip files excluding storage folder
+        run: zip -r deploy.zip . -x "storage/*"
+
+      - name: Check Zip
+        run: ls -al
+
+      # - uses: shallwefootball/s3-upload-action@master
+      #   name: Upload S3
+      #   id: S3
+      #   with:
+      #     aws_key_id: ${{ secrets.AWS_KEY_ID }}
+      #     aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+      #     aws_bucket: ${{ secrets.AWS_BUCKET }}
+      #     source_dir: 'static'
